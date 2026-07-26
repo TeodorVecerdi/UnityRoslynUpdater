@@ -14,7 +14,11 @@ internal sealed class PatchUnityAssembliesOperation : IUpdateOperation
         var embeddedTypes = AssemblyDefinition.FromStream(typeof(Program).Assembly.GetManifestResourceStream("EmbeddedTypes.dll")!);
         var modulePatches = JsonSerializer.Deserialize(typeof(Program).Assembly.GetManifestResourceStream("Patches.json")!, JsonSourceGenerationContext.Default.UnityPatchCollectionArray);
 
-        foreach (string dllPath in Directory.EnumerateFiles(context.EditorDataPath, "UnityEngine.dll", SearchOption.AllDirectories))
+        string[] candidateAssemblyNames = ["UnityEngine.dll", "UnityEditor.dll", "UnityEditor.CoreModule.dll"];
+        var candidateDllPaths = candidateAssemblyNames
+            .SelectMany(name => Directory.EnumerateFiles(context.EditorDataPath, name, SearchOption.AllDirectories));
+
+        foreach (string dllPath in candidateDllPaths)
         {
             var unityAssembly = AssemblyDefinition.FromFile(dllPath);
 

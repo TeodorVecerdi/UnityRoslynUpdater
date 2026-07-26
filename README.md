@@ -34,6 +34,15 @@ Create a `csc.rsp` file in the same directory as your assembly definition (`.asm
 * Crash
   * Requires runtime features that Unity does not have. Attempting to use the feature may compile, but will result in crashes.
 
+## C# 15
+Feature | Status
+-|-
+[Collection expression arguments](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15#collection-expression-arguments) | Working
+[Union types](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15#union-types) | Working
+[Closed hierarchies](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15#closed-hierarchies) | Working
+[Memory safety](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15#memory-safety) | Working
+
+
 ## C# 14
 Feature | Status
 -|-

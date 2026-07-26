@@ -6,6 +6,7 @@ namespace UnityRoslynUpdater;
 [JsonPolymorphic]
 [JsonDerivedType(typeof(AddAttributeOnParametersPatch), AddAttributeOnParametersPatch.JsonDiscriminator)]
 [JsonDerivedType(typeof(AddAttributeOnMethodPatch), AddAttributeOnMethodPatch.JsonDiscriminator)]
+[JsonDerivedType(typeof(FixRoslynSdkSelectionPatch), FixRoslynSdkSelectionPatch.JsonDiscriminator)]
 internal abstract class UnityPatch
 {
     public abstract bool Execute(ModuleDefinition module, TypeDefinition type);

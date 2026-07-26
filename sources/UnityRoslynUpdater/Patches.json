@@ -35,5 +35,18 @@
         "parameters": ["source"]
       }
     ]
+  },
+  {
+    "path": ["UnityEditor.Scripting.ScriptCompilation", "BeeScriptCompilation"],
+    "patches":
+    [
+      // Unity picks the Roslyn compiler by returning the FIRST version-numbered
+      // directory it finds under DotNetSdk/sdk, not the highest one. Since this tool
+      // links DotNetSdk to the whole .NET install (which can contain several SDKs),
+      // that can end up selecting an older Roslyn/C# version than intended.
+      {
+        "$type": "FixRoslynSdkSelection"
+      }
+    ]
   }
 ]
