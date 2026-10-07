@@ -52,7 +52,7 @@ internal sealed class PatchSourceGeneratorOperation : IUpdateOperation
         {
             if (local.VariableType is TypeDefOrRefSignature { FullName: NamespaceDeclarationSyntax } type)
             {
-                local.VariableType = new TypeDefOrRefSignature(baseNamespaceDeclarationSyntax);
+                local.VariableType = new TypeDefOrRefSignature(baseNamespaceDeclarationSyntax, isValueType: false);
                 patches++;
             }
         }

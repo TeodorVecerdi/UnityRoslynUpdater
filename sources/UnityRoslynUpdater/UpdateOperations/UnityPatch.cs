@@ -9,7 +9,7 @@ namespace UnityRoslynUpdater;
 [JsonDerivedType(typeof(FixRoslynSdkSelectionPatch), FixRoslynSdkSelectionPatch.JsonDiscriminator)]
 internal abstract class UnityPatch
 {
-    public abstract bool Execute(ModuleDefinition module, TypeDefinition type);
+    public abstract bool Execute(UpdateContext context, ModuleDefinition module, TypeDefinition type);
 
     protected static MethodDefinition? FindMethod(TypeDefinition type, string name, string signature)
     {
@@ -18,6 +18,8 @@ internal abstract class UnityPatch
 
     protected static ITypeDefOrRef? FindAttribute(ModuleDefinition module, string? ns, string name)
     {
-        return (ITypeDefOrRef?)module.CreateTypeReference(ns, name).Resolve() ?? module.CorLibTypeFactory.CorLibScope.CreateTypeReference(ns, name);
+        return module.CreateTypeReference(ns, name).TryResolve(module.RuntimeContext, out var type)
+            ? type
+            : module.CorLibTypeFactory.CorLibScope.CreateTypeReference(ns, name);
     }
 }

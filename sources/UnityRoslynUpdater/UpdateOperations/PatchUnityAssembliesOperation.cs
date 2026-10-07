@@ -37,7 +37,7 @@ internal sealed class PatchUnityAssembliesOperation : IUpdateOperation
 
                 foreach (var patch in definition.Patches ?? [])
                 {
-                    if (!patch.Execute(type.DeclaringModule, type))
+                    if (!patch.Execute(context, type.DeclaringModule, type))
                     {
                         Console.WriteLine($"{patch.GetType().Name} failed");
                     }
@@ -80,7 +80,7 @@ internal sealed class PatchUnityAssembliesOperation : IUpdateOperation
             if (attribute?.Signature?.FixedArguments is not [{ Element: TypeDefOrRefSignature signature }])
                 continue;
 
-            if (signature.Resolve(embeddedTypes) is not TypeDefinition type)
+            if (!signature.TryResolve(embeddedTypes.RuntimeContext, out var type))
                 continue;
 
             if (module.TopLevelTypes.Any(t => t.IsTypeOf(signature.Namespace, signature.Name)))

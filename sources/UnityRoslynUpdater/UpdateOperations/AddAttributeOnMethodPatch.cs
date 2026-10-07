@@ -17,7 +17,7 @@ internal sealed class AddAttributeOnMethodPatch : UnityPatch
     [JsonPropertyName("attribute")]
     public string[]? Attribute { get; set; }
 
-    public override bool Execute(ModuleDefinition module, TypeDefinition type)
+    public override bool Execute(UpdateContext context, ModuleDefinition module, TypeDefinition type)
     {
         if (Method is null || Signature is null || Attribute is null)
             return false;

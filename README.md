@@ -19,7 +19,7 @@ By default, every operation is applied. Use `--only` or `--skip` with a comma-se
 
 Operation | Description
 -|-
-`sdk` | Links the editor to the newest .NET SDK installed on the machine.
+`sdk` | Links the editor to the newest .NET SDK installed on the machine (or the one selected with `--sdk`).
 `source-generator` | Patches Unity's source generator so scripts using file-scoped namespaces are mapped to their classes.
 `assemblies` | Patches Unity assemblies for compatibility with newer C# versions.
 `docs` | Downloads missing BCL documentation for IntelliSense.
@@ -27,6 +27,13 @@ Operation | Description
 For example, to only fix file-scoped namespace support on an editor that already ships a recent enough compiler:
 
 `UnityRoslynUpdater.exe "C:\Program Files\Unity\Hub\Editor\7000.0.0a7\Editor" --only source-generator`
+
+## Selecting an SDK
+By default, the editor is linked to the newest .NET SDK installed on the machine, including prereleases. Use `--sdk` with a full version or a prefix of one to pick a specific SDK instead (the newest match is used):
+
+`UnityRoslynUpdater.exe "C:\Program Files\Unity\Hub\Editor\6000.7.0b3\Editor" --sdk 10.0`
+
+The selected SDK stays in use until the tool is run again, even if newer SDKs are installed. Without `--sdk`, Unity 6.5+ editors always use the newest installed SDK.
 
 # Usage
 After updating the Roslyn compiler, newer C# language versions are available but not enabled by default. To enable them, you must explicitly opt in for each assembly definition in your project.

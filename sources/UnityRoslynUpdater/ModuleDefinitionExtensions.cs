@@ -27,7 +27,7 @@ internal static class ModuleDefinitionExtensions
             for (int i = 2; i < typePath.Length; i++)
                 typeRef = typeRef.CreateTypeReference(null, typePath[i]!);
 
-            return typeRef.Resolve();
+            return typeRef.TryResolve(module.RuntimeContext, out var type) ? type : null;
         }
     }
 }
