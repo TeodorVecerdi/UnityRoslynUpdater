@@ -98,7 +98,9 @@ Feature | Status
 [Alias any type](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12#alias-any-type) | Working
 [Inline arrays](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12#inline-arrays) | Not Supported
 [Collection expressions](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12#collection-expressions) | Working
-[Interceptors](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12#interceptors) | Not Supported
+[Interceptors](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12#interceptors) | Working<sup>1</sup>
+
+1. Unity does not use MSBuild, so the `InterceptorsNamespaces` property that normally enables interceptors has no effect. Instead, add the namespaces of the generated interceptors to `csc.rsp` (separated by `;`), e.g. `-features:InterceptorsNamespaces=Dapper.AOT`, otherwise the generated code fails to compile with CS9137.
 
 ## C# 11
 Feature | Status
