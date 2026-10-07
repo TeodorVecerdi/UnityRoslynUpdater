@@ -14,6 +14,20 @@ Pass the Unity editor path to `UnityRoslynUpdater.exe`:
 
 For example: `UnityRoslynUpdater.exe "C:\Program Files\Unity\Hub\Editor\2022.3.8f1\Editor"`
 
+## Selecting Operations
+By default, every operation is applied. Use `--only` or `--skip` with a comma-separated list of operation names to change that (the editor path can be omitted to select it interactively):
+
+Operation | Description
+-|-
+`sdk` | Links the editor to the newest .NET SDK installed on the machine.
+`source-generator` | Patches Unity's source generator so scripts using file-scoped namespaces are mapped to their classes.
+`assemblies` | Patches Unity assemblies for compatibility with newer C# versions.
+`docs` | Downloads missing BCL documentation for IntelliSense.
+
+For example, to only fix file-scoped namespace support on an editor that already ships a recent enough compiler:
+
+`UnityRoslynUpdater.exe "C:\Program Files\Unity\Hub\Editor\7000.0.0a7\Editor" --only source-generator`
+
 # Usage
 After updating the Roslyn compiler, newer C# language versions are available but not enabled by default. To enable them, you must explicitly opt in for each assembly definition in your project.
 
