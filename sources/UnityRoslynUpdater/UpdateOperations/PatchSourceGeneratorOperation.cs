@@ -18,6 +18,11 @@ internal sealed class PatchSourceGeneratorOperation : IUpdateOperation
             // We patch the TypeNameHelper.GetTypeInformation function to replace all references
             // to NamespaceDeclarationSyntax with BaseNamespaceDeclarationSyntax, which fixes it.
             //
+            // Unity fixed this in 7000.0.0a16 and 6000.7.0b10 (UUM-142256) by adding separate
+            // FileScopedNamespaceDeclarationSyntax checks. Patching that version would make the
+            // NamespaceDeclarationSyntax check match file-scoped namespaces too, appending the
+            // namespace twice ("A.BA.B"), so those assemblies are left alone.
+            //
             PatchSourceGenerator(context, filePath);
         }
 
@@ -27,6 +32,7 @@ internal sealed class PatchSourceGeneratorOperation : IUpdateOperation
     private static bool PatchSourceGenerator(UpdateContext context, string dllPath)
     {
         const string NamespaceDeclarationSyntax = "Microsoft.CodeAnalysis.CSharp.Syntax.NamespaceDeclarationSyntax";
+        const string FileScopedNamespaceDeclarationSyntax = "Microsoft.CodeAnalysis.CSharp.Syntax.FileScopedNamespaceDeclarationSyntax";
         var assembly = AssemblyDefinition.FromFile(dllPath);
 
         if (assembly.ManifestModule is not { } module)
@@ -41,6 +47,12 @@ internal sealed class PatchSourceGeneratorOperation : IUpdateOperation
 
         if (method.CilMethodBody is not { Instructions: var instructions } body)
             return false;
+
+        if (instructions.Any(i => i.Operand is TypeReference { FullName: FileScopedNamespaceDeclarationSyntax }))
+        {
+            Console.WriteLine($"Source generator assembly at {Path.GetRelativePath(context.EditorDataPath, dllPath)} already supports file-scoped namespaces.");
+            return true;
+        }
 
         var baseNamespaceDeclarationSyntax = module.DefaultImporter.ImportType(
             new TypeReference(
